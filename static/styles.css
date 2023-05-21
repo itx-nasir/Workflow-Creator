@@ -1,0 +1,59 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1, h2 {
+    margin-bottom: 10px;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+.workflow-container {
+    min-height: 300px;
+    border: 2px dashed #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.workflow-item {
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin-bottom: 10px;
+    cursor: move;
+}
+
+#workflow-dropzone {
+    background-color: #f0f0f0;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.approve-button {
+    background-color: green;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+
+.workflow-submit {
+    margin-top: 10px;
+}

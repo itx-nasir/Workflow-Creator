@@ -9,18 +9,21 @@ function drag(event) {
 function drop(event) {
     event.preventDefault();
     var data = event.dataTransfer.getData("text");
-    var dropzone = document.getElementById("workflow-dropzone");
+    var workflowContainer = document.getElementById("workflow-container");
+    var workflowItem = document.createElement("div");
+    workflowItem.classList.add("workflow-item");
+    workflowItem.innerText = data;
+    workflowContainer.appendChild(workflowItem);
+    updateStepsInput();
+}
+
+function updateStepsInput() {
+    var workflowContainer = document.getElementById("workflow-container");
+    var workflowItems = workflowContainer.getElementsByClassName("workflow-item");
     var stepsInput = document.getElementById("steps");
-
-    var step = document.createElement("div");
-    step.innerText = data;
-    step.className = "workflow-item";
-
-    dropzone.appendChild(step);
-
-    // Update the steps input value
-    var steps = Array.from(dropzone.getElementsByClassName("workflow-item")).map(function(item) {
-        return item.innerText;
-    });
-    stepsInput.value = steps.join(", ");
+    var steps = "";
+    for (var i = 0; i < workflowItems.length; i++) {
+        steps += workflowItems[i].innerText + ",";
+    }
+    stepsInput.value = steps;
 }

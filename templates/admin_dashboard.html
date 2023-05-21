@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+        <ul>
+            <li><a href="/create-workflow">Create New Workflow</a></li>
+            <li><a href="/approve-workflows">Pending Approval</a></li>
+            <li><a href="/user-management">User Management</a></li>
+            <li><a href="/search-workflow">Search for Workflow</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div>
+</body>
+</html>

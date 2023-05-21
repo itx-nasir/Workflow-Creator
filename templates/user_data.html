@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Data</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>User Data</h1>
+        <p>Username: {{ user['username'] }}</p>
+        <p>Role: {{ user['role'] }}</p>
+        <a href="/user-management">Back to User Management</a>
+    </div>
+</body>
+</html>

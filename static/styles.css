@@ -103,3 +103,26 @@ li {
     background-color: #f9f9f9;
     color: #666;
 }
+
+.rectangle {
+  width: 200px;
+  height: 100px;
+  border: 2px solid black;
+}
+
+.arrow {
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+.arrow::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid black;
+  transform: translateX(-50%);
+}

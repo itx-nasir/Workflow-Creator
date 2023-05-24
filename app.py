@@ -125,13 +125,15 @@ def create_workflow():
             # Process the created workflow
             workflow_name = request.form['workflow_name']
             steps = request.form.getlist('step')
+            texts = request.form.getlist('text')
+            connections = request.form.getlist('connection')
 
             # Save the workflow to the database
             conn = get_db_connection()
             cursor = conn.cursor()
 
-            cursor.execute('INSERT INTO workflows (name, steps) VALUES (?, ?)',
-                           (workflow_name, ', '.join(steps)))
+            cursor.execute('INSERT INTO workflows (name,is_approved ,status,steps, texts, connections) VALUES (?,?,?, ?, ?, ?)',
+                           (workflow_name, 0,'new', ', '.join(steps), ', '.join(texts), ', '.join(connections)))
 
             conn.commit()
             conn.close()

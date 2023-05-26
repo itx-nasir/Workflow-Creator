@@ -4,11 +4,15 @@
     <title>Create Workflow</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='fabric.js') }}"></script>
+    <script src="{{ url_for('static', filename='canvas.js') }}"></script>
+
+    <!-- <script src="fabric.js" defer></script>
+    <script src="canvas.js" defer></script> -->
     <style>
-        .workflow-container {
+        #workflow-container {
             min-height: 300px;
             border: 2px dashed #ccc;
-            padding: 20px;
             margin-bottom: 20px;
         }
 
@@ -25,25 +29,25 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Create Workflow</h1>
-        <form method="POST" action="/create-workflow">
-        <div class="workflow-container" id="workflow-container">
-            <div class="workflow-item" draggable="true" ondragstart="drag(event)">
-                <div class="rectangle"></div>
-                <div class="arrow"></div>
-                <div class="text">Step 1</div>
-            </div>
-            <!-- Add more workflow items here -->
-        </div>
+<div class="container">
+    <h1>Create Workflow</h1>
+    <div>
+        <button onclick="deleteObj()">Delete</button>
+        <button onclick="addRect()">Rect</button>
+        <button onclick="addArrow()">Arrow</button>
+        <button onclick="addText()">Text</button>
+    </div>
+    <div id="workflow-container">
+        <canvas id="canvas"></canvas>
+    </div>
+    <form method="POST" action="/create-workflow">
         <div id="workflow-dropzone" ondrop="drop(event)" ondragover="allowDrop(event)">
             Drop here to add steps
         </div>
-
-            <input type="hidden" id="steps" name="steps" value="">
-            <input type="text" name="workflow_name"/>
-            <input type="submit" class="workflow-submit" value="Create Workflow">
-        </form>
-    </div>
+        <input type="hidden" id="steps" name="steps" value="">
+        <input type="text" name="workflow_name" placeholder="Enter text" />
+        <input type="submit" class="workflow-submit" value="Create Workflow">
+    </form>
+</div>
 </body>
 </html>

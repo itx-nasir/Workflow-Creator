@@ -18,19 +18,32 @@
             margin-bottom: 10px;
             cursor: move;
         }
+
+        .workflow-submit {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Create Workflow</h1>
+        <form method="POST" action="/create-workflow">
         <div class="workflow-container" id="workflow-container">
-            <div class="workflow-item" draggable="true" ondragstart="drag(event)">Step 1</div>
-            <div class="workflow-item" draggable="true" ondragstart="drag(event)">Step 2</div>
-            <div class="workflow-item" draggable="true" ondragstart="drag(event)">Step 3</div>
+            <div class="workflow-item" draggable="true" ondragstart="drag(event)">
+                <div class="rectangle"></div>
+                <div class="arrow"></div>
+                <div class="text">Step 1</div>
+            </div>
+            <!-- Add more workflow items here -->
         </div>
         <div id="workflow-dropzone" ondrop="drop(event)" ondragover="allowDrop(event)">
             Drop here to add steps
         </div>
+
+            <input type="hidden" id="steps" name="steps" value="">
+            <input type="text" name="workflow_name"/>
+            <input type="submit" class="workflow-submit" value="Create Workflow">
+        </form>
     </div>
 </body>
 </html>

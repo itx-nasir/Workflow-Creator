@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Approve Workflows</title>
+    <title>Pending Workflows</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Approve Workflows</h1>
+        <h1>Pending Workflows</h1>
         <ul>
             {% for workflow in workflows %}
-                <li>{{ workflow['name'] }} <a href="/approve-workflow/{{ workflow['id'] }}" class="approve-button">Approve</a></li>
+                <li>{{ workflow['name'] }}</li>
             {% endfor %}
         </ul>
     </div>

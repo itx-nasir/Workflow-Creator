@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search Workflow</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Search Workflow</h1>
+        <form method="POST" action="/search-workflow">
+            <input type="text" name="search_query" placeholder="Enter workflow name">
+            <input type="submit" value="Search">
+        </form>
+        {% if workflows %}
+            <h2>Search Results for "{{ search_query }}"</h2>
+            <ul>
+                {% for workflow in workflows %}
+                    <li>{{ workflow['name'] }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
-
+import datetime
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'  # Change this to a secure secret key
 
@@ -122,18 +122,16 @@ def user_data(user_id):
 def create_workflow():
     if check_login() and session['role'] == 'user':
         if request.method == 'POST':
-            # Process the created workflow
-            workflow_name = request.form['workflow_name']
-            steps = request.form.getlist('step')
-            texts = request.form.getlist('text')
-            connections = request.form.getlist('connection')
-
-            # Save the workflow to the database
+            workflow_data = request.get_json()
+            canvas_data = workflow_data.get('canvasData')
+            workflow_name = workflow_data.get('workflow_name')  
+            print(workflow_name)
             conn = get_db_connection()
             cursor = conn.cursor()
 
-            cursor.execute('INSERT INTO workflows (name,is_approved ,status,steps, texts, connections) VALUES (?,?,?, ?, ?, ?)',
-                           (workflow_name, 0,'new', ', '.join(steps), ', '.join(texts), ', '.join(connections)))
+            # Insert the workflow data into the database
+            cursor.execute('INSERT INTO workflows (name, canvas_data,status, created_at,is_approved) VALUES (?, ?, ?,?,?)',
+                           (workflow_name, canvas_data, 'active',datetime.datetime.now(),0))
 
             conn.commit()
             conn.close()
@@ -177,13 +175,31 @@ def approve_workflow(workflow_id):
         return redirect('/login')
 
 
+
+@app.route('/view-workflow/<workflow_id>')
+def view_workflow(workflow_id):
+    if check_login() and session['role'] == 'user':
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Retrieve the workflow data from the database
+        cursor.execute('SELECT * FROM workflows WHERE id = ?', (workflow_id,))
+        workflow = cursor.fetchone()
+
+        conn.close()
+
+        return render_template('view_workflow.html', workflow=workflow)
+    else:
+        return redirect('/login')
+
+
 @app.route('/pending-workflows')
 def pending_workflows():
     if check_login() and session['role'] == 'user':
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        cursor.execute('SELECT * FROM workflows WHERE is_approved = 1')
+        cursor.execute('SELECT * FROM workflows WHERE is_approved = 0')
         workflows = cursor.fetchall()
 
         conn.close()

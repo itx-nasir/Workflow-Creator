@@ -41,10 +41,6 @@
         <canvas id="canvas"></canvas>
     </div>
     <form method="POST" action="/create-workflow">
-        <div id="workflow-dropzone" ondrop="drop(event)" ondragover="allowDrop(event)">
-            Drop here to add steps
-        </div>
-        <input type="hidden" id="steps" name="steps" value="">
         <input type="text" name="workflow_name" placeholder="Enter text" />
         <input type="submit" class="workflow-submit" value="Create Workflow">
     </form>

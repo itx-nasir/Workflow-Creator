@@ -15,8 +15,10 @@
             <h2>Search Results for "{{ search_query }}"</h2>
             <ul>
                 {% for workflow in workflows %}
-                    <li>{{ workflow['name'] }}</li>
-                {% endfor %}
+                <li>
+                    <a href="{{ url_for('view_workflow', workflow_id=workflow['id']) }}">{{ workflow['name'] }}</a>
+                </li>
+            {% endfor %}
             </ul>
         {% endif %}
     </div>

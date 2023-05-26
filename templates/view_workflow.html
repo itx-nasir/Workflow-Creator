@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Workflow</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>View Workflow</h1>
+        <h2>{{ workflow['name'] }}</h2>
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <script src="{{ url_for('static', filename='fabric.js') }}"></script>
+    <script src="{{ url_for('static', filename='canvas.js') }}"></script>
+    <script>
+        var workflowData = JSON.parse('{{ workflow['data'] }}');
+
+        // Load the workflow data into the canvas
+        canvas.loadFromJSON(workflowData, canvas.renderAll.bind(canvas));
+    </script>
+</body>
+</html>

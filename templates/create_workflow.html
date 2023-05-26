@@ -3,12 +3,12 @@
 <head>
     <title>Create Workflow</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <script src="{{ url_for('static', filename='fabric.js') }}"></script>
-    <script src="{{ url_for('static', filename='canvas.js') }}"></script>
+    <!-- <script src="{{ url_for('static', filename='script.js') }}"></script> -->
+    <!-- <script src="{{ url_for('static', filename='fabric.js') }}"></script>
+    <script src="{{ url_for('static', filename='canvas.js') }}"></script> -->
 
-    <!-- <script src="fabric.js" defer></script>
-    <script src="canvas.js" defer></script> -->
+    <script src="/static/fabric.js" defer></script>
+    <script src="/static/canvas.js" defer></script>
     <style>
         #workflow-container {
             min-height: 300px;
@@ -42,7 +42,7 @@
     </div>
     <form method="POST" action="/create-workflow">
         <input type="text" name="workflow_name" placeholder="Enter text" />
-        <input type="submit" class="workflow-submit" value="Create Workflow">
+        <button onclick="createWorkflow()" class="workflow-submit">Create Workflow</button>
     </form>
 </div>
 </body>

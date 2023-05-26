@@ -187,3 +187,29 @@ function addText() {
     }));
     canvas.renderAll()
 }
+
+
+function createWorkflow() {
+    event.preventDefault(); // Prevent the default form submission behavior
+
+    var workflowData = {
+        canvasData: JSON.stringify(canvas.toJSON()),
+        workflow_name: document.querySelector('input[name="workflow_name"]').value // Get the value of the workflow_name field
+    };
+
+    // Send the workflow data to the server
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '/create-workflow');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            // Workflow created successfully
+            window.location.href = '/user-dashboard';
+        } else {
+            // Error occurred while creating the workflow
+            console.error('Error:', xhr.responseText);
+        }
+    };
+    xhr.send(JSON.stringify(workflowData));
+}
+

@@ -3,21 +3,46 @@
 <head>
     <title>View Workflow</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='fabric.js') }}"></script>
+    <script src="{{ url_for('static', filename='fabric.js') }}"></script>
 </head>
 <body>
     <div class="container">
         <h1>View Workflow</h1>
         <h2>{{ workflow['name'] }}</h2>
-        <canvas id="canvas"></canvas>
+        <div id="workflow-container">
+            <canvas id="workflow-canvas"></canvas>
+        </div>
     </div>
-
-    <script src="{{ url_for('static', filename='fabric.js') }}"></script>
-    <script src="{{ url_for('static', filename='canvas.js') }}"></script>
     <script>
-        var workflowData = JSON.parse('{{ workflow['data'] }}');
+        // console.log('{{ workflow["canvas_data"]|safe }}');
+
+        var workflowData = JSON.parse('{{ workflow["canvas_data"]|safe|replace("\'", "\\\'") }}');
+        // JSON.parse('{{ workflow["canvas_data"]|safe|replace("\'", "\\\'") }}');       
+        console.log(workflowData);
+        console.log(typeof workflowData);
 
         // Load the workflow data into the canvas
-        canvas.loadFromJSON(workflowData, canvas.renderAll.bind(canvas));
+        var workflowCanvas = new fabric.Canvas('workflow-canvas',{height:500,width:900});
+        workflowData.objects.forEach(function (object) {
+        var fabricObject;
+
+        if (object.type === 'rect') {
+        fabricObject = new fabric.Rect(object);
+        } else if (object.type === 'lineArrow') {
+        fabricObject = new fabric.LineArrow(object);
+        } else if (object.type === 'i-text') {
+        fabricObject = new fabric.IText(object.text, object);
+        }
+        // Add more conditions for other object types if needed
+
+        if (fabricObject) {
+        workflowCanvas.add(fabricObject);
+        }
+        });
+
+        workflowCanvas.renderAll();
+
     </script>
 </body>
 </html>

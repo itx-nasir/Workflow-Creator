@@ -125,7 +125,8 @@ def create_workflow():
             workflow_data = request.get_json()
             canvas_data = workflow_data.get('canvasData')
             workflow_name = workflow_data.get('workflow_name')  
-            print(workflow_name)
+            # print(canvas_data)
+            # print(type(canvas_data))
             conn = get_db_connection()
             cursor = conn.cursor()
 

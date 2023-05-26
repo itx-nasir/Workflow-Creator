@@ -39,6 +39,9 @@ def login():
         if user:
             session['username'] = user['username']
             session['role'] = user['role']
+            # After authenticating the user and verifying their credentials
+            session['user_id'] = user['id']
+
             if user['role'] == 'user':
                 return redirect('/user-dashboard')
             elif user['role'] == 'admin':
@@ -59,8 +62,8 @@ def register():
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        cursor.execute('INSERT INTO users (username, password, role) VALUES (?, ?, ?)',
-                       (username, password, role))
+        cursor.execute('INSERT INTO users (username, password, role,is_deleted) VALUES (?, ?, ?,?)',
+                       (username, password, role,0))
 
         conn.commit()
         conn.close()
@@ -125,13 +128,15 @@ def create_workflow():
             workflow_data = request.get_json()
             canvas_data = workflow_data.get('canvasData')
             workflow_name = workflow_data.get('workflow_name')  
-            print(workflow_name)
             conn = get_db_connection()
             cursor = conn.cursor()
 
-            # Insert the workflow data into the database
-            cursor.execute('INSERT INTO workflows (name, canvas_data,status, created_at,is_approved) VALUES (?, ?, ?,?,?)',
-                           (workflow_name, canvas_data, 'active',datetime.datetime.now(),0))
+            # Retrieve the user ID from the session
+            user_id = session['user_id']
+
+            # Insert the workflow data and user ID into the database
+            cursor.execute('INSERT INTO workflows (name, canvas_data, status, created_at, is_approved, user_id) VALUES (?, ?, ?, ?, ?, ?)',
+                           (workflow_name, canvas_data, 'active', datetime.datetime.now(), 0, user_id))
 
             conn.commit()
             conn.close()
@@ -141,6 +146,7 @@ def create_workflow():
         return render_template('create_workflow.html')
     else:
         return redirect('/login')
+
 
 
 @app.route('/approve-workflows')
@@ -159,7 +165,7 @@ def approve_workflows():
         return redirect('/login')
 
 
-@app.route('/approve-workflow/<int:workflow_id>', methods=['POST'])
+@app.route('/approve-workflow/<workflow_id>')
 def approve_workflow(workflow_id):
     if check_login() and session['role'] == 'admin':
         conn = get_db_connection()
@@ -178,7 +184,7 @@ def approve_workflow(workflow_id):
 
 @app.route('/view-workflow/<workflow_id>')
 def view_workflow(workflow_id):
-    if check_login() and session['role'] == 'user':
+    if check_login():
         conn = get_db_connection()
         cursor = conn.cursor()
 
@@ -198,8 +204,8 @@ def pending_workflows():
     if check_login() and session['role'] == 'user':
         conn = get_db_connection()
         cursor = conn.cursor()
-
-        cursor.execute('SELECT * FROM workflows WHERE is_approved = 0')
+        user_id = session['user_id']
+        cursor.execute('SELECT * FROM workflows WHERE is_approved = 0 and user_id = ?', (user_id,))
         workflows = cursor.fetchall()
 
         conn.close()
@@ -214,11 +220,14 @@ def search_workflow():
     if check_login():
         if request.method == 'POST':
             search_query = request.form['search_query']
-
+            role = session['role']
+            user_id = session['user_id']
             conn = get_db_connection()
             cursor = conn.cursor()
-
-            cursor.execute('SELECT * FROM workflows WHERE name LIKE ?', ('%' + search_query + '%',))
+            if role == 'admin':
+                cursor.execute('SELECT * FROM workflows WHERE name LIKE ?', ('%' + search_query + '%',))
+            else:
+                cursor.execute('SELECT * FROM workflows WHERE name LIKE ? and user_id = ?', ('%' + search_query + '%',user_id))
             workflows = cursor.fetchall()
 
             conn.close()

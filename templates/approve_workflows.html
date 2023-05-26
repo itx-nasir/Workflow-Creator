@@ -9,7 +9,10 @@
         <h1>Approve Workflows</h1>
         <ul>
             {% for workflow in workflows %}
-                <li>{{ workflow['name'] }} <a href="/approve-workflow/{{ workflow['id'] }}" class="approve-button">Approve</a></li>
+                <li>
+                    <a href="{{ url_for('view_workflow', workflow_id=workflow['id']) }}">{{ workflow['name'] }}</a>
+                    <a href="/approve-workflow/{{ workflow['id'] }}" class="approve-button">Approve</a>
+                </li>
             {% endfor %}
         </ul>
     </div>

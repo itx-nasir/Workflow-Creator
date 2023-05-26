@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
 import datetime
+import json
 app = Flask(__name__)
 app.secret_key = 'your-secret-key'  # Change this to a secure secret key
 
@@ -130,8 +131,8 @@ def create_workflow():
             cursor = conn.cursor()
 
             # Insert the workflow data into the database
-            cursor.execute('INSERT INTO workflows (name, canvas_data,status, created_at,is_approved) VALUES (?, ?, ?,?,?)',
-                           (workflow_name, canvas_data, 'active',datetime.datetime.now(),0))
+            cursor.execute('INSERT INTO workflows (name, canvas_data, status, created_at, is_approved) VALUES (?, ?, ?, ?, ?)',
+                           (workflow_name, json.dumps(canvas_data), 'active', datetime.datetime.now(), 0))
 
             conn.commit()
             conn.close()
@@ -141,6 +142,7 @@ def create_workflow():
         return render_template('create_workflow.html')
     else:
         return redirect('/login')
+
 
 
 @app.route('/approve-workflows')
@@ -183,14 +185,17 @@ def view_workflow(workflow_id):
         cursor = conn.cursor()
 
         # Retrieve the workflow data from the database
-        cursor.execute('SELECT * FROM workflows WHERE id = ?', (workflow_id,))
+        cursor.execute('SELECT canvas_data, name FROM workflows WHERE id = ?', (workflow_id,))
         workflow = cursor.fetchone()
 
         conn.close()
-
+        print(json.loads(workflow['canvas_data']))
         return render_template('view_workflow.html', workflow=workflow)
     else:
         return redirect('/login')
+
+
+
 
 
 @app.route('/pending-workflows')

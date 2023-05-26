@@ -1,8 +1,9 @@
 let box = document.querySelector('#workflow-container');
 let width = box.offsetWidth;
 let height = box.offsetHeight;
-let canvas = new fabric.Canvas('canvas',{
-    width,height
+let canvas = new fabric.Canvas('workflow-canvas', {
+    width: width,
+    height: height
 });
 let drawingMode = false;
 let scaleProps = {
@@ -13,9 +14,9 @@ let scaleProps = {
     strokeWidth: 10,
     width: 56,
     top: 407
-}
-fabric.LineArrow = fabric.util.createClass(fabric.Line, {
+};
 
+fabric.LineArrow = fabric.util.createClass(fabric.Line, {
     type: 'lineArrow',
 
     initialize: function(element, options) {
@@ -47,7 +48,6 @@ fabric.LineArrow = fabric.util.createClass(fabric.Line, {
         ctx.fillStyle = this.stroke;
         ctx.fill();
         ctx.restore();
-
     }
 });
 
@@ -57,10 +57,9 @@ fabric.LineArrow.fromObject = function(object, callback) {
 
 fabric.LineArrow.async = true;
 
-
 var Arrow = (function() {
-    function Arrow(canvas) {
-        this.canvas = canvas;
+    function Arrow(workflowCanvas) {
+        this.canvas = workflowCanvas;
         this.className = 'Arrow';
         this.isDrawing = false;
         this.bindEvents();
@@ -79,13 +78,13 @@ var Arrow = (function() {
         });
         inst.canvas.on('object:moving', function(o) {
             inst.disable();
-        })
-    }
+        });
+    };
 
     Arrow.prototype.onMouseUp = function(o) {
         var inst = this;
         drawingMode = false;
-        canvas.defaultCursor = 'default'
+        workflowCanvas.defaultCursor = 'default';
         inst.disable();
     };
 
@@ -106,7 +105,7 @@ var Arrow = (function() {
     };
 
     Arrow.prototype.onMouseDown = function(o) {
-        if(!drawingMode) return
+        if (!drawingMode) return;
         var inst = this;
         inst.enable();
         var pointer = inst.canvas.getPointer(o.e);
@@ -127,26 +126,24 @@ var Arrow = (function() {
 
     Arrow.prototype.isEnable = function() {
         return this.isDrawing;
-    }
+    };
 
     Arrow.prototype.enable = function() {
         this.isDrawing = true;
-    }
+    };
 
     Arrow.prototype.disable = function() {
         this.isDrawing = false;
-    }
+    };
 
     return Arrow;
 }());
 var arrow = new Arrow(canvas);
-window.canvas = canvas;
+window.workflowCanvas = canvas;
 
-
-//Add rect
-
+// Add rect
 function addRect() {
-    canvas.defaultCursor = 'default';
+    workflowCanvas.defaultCursor = 'default';
     drawingMode = false;
     var rect = new fabric.Rect({
         left: 100,
@@ -154,47 +151,44 @@ function addRect() {
         fill: 'transparent',
         width: 200,
         height: 100,
-        stroke:'black',
-        strokeWidth:2
+        stroke: 'black',
+        strokeWidth: 2
     });
-    canvas.add(rect);
-    canvas.renderAll();
+    workflowCanvas.add(rect);
+    workflowCanvas.renderAll();
 }
 
 function deleteObj() {
-let obj = canvas.getActiveObject();
-if(!obj) return;
-canvas.remove(obj);
-canvas.renderAll();
+    let obj = workflowCanvas.getActiveObject();
+    if (!obj) return;
+    workflowCanvas.remove(obj);
+    workflowCanvas.renderAll();
 }
 
 function addArrow() {
-drawingMode = !drawingMode;
-if(drawingMode){
-    canvas.defaultCursor = 'crosshair'
+    drawingMode = !drawingMode;
+    if (drawingMode) {
+        workflowCanvas.defaultCursor = 'crosshair';
+    } else {
+        workflowCanvas.defaultCursor = 'default';
+    }
 }
-else{
-    canvas.defaultCursor = 'default'
-}
-}
-
 
 function addText() {
-    canvas.add(new fabric.IText('Example text', {
+    workflowCanvas.add(new fabric.IText('Example text', {
         fontFamily: 'Delicious_500',
         left: 50,
         top: 50
     }));
-    canvas.renderAll()
+    workflowCanvas.renderAll();
 }
-
 
 function createWorkflow() {
     event.preventDefault(); // Prevent the default form submission behavior
 
     var workflowData = {
-        canvasData: JSON.stringify(canvas.toJSON()),
-        workflow_name: document.querySelector('input[name="workflow_name"]').value // Get the value of the workflow_name field
+        canvasData: JSON.stringify(workflowCanvas.toJSON()),
+        workflow_name: document.querySelector('input[name="workflow_name"]').value, // Get the value of the workflow_name field
     };
 
     // Send the workflow data to the server
@@ -204,6 +198,8 @@ function createWorkflow() {
     xhr.onload = function() {
         if (xhr.status === 200) {
             // Workflow created successfully
+            var response = JSON.parse(xhr.responseText);
+            loadWorkflowData(response.workflowData); // Load the workflow data into the canvas
             window.location.href = '/user-dashboard';
         } else {
             // Error occurred while creating the workflow
@@ -213,3 +209,8 @@ function createWorkflow() {
     xhr.send(JSON.stringify(workflowData));
 }
 
+function loadWorkflowData(workflowData) {
+    workflowCanvas.loadFromJSON(workflowData, function() {
+        workflowCanvas.renderAll();
+    });
+}

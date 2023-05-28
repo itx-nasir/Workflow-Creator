@@ -97,10 +97,11 @@ def user_management():
 
         cursor.execute('SELECT * FROM users WHERE is_deleted = 0')
         users = cursor.fetchall()
-
+        cursor.execute('SELECT * FROM users WHERE is_deleted = 1')
+        deleted_users = cursor.fetchall()
         conn.close()
 
-        return render_template('user_management.html', users=users)
+        return render_template('user_management.html', users=users, deleted_users=deleted_users)
     else:
         return redirect('/login')
 
@@ -180,6 +181,20 @@ def approve_workflow(workflow_id):
     else:
         return redirect('/login')
 
+@app.route('/delete-user/<user_id>')
+def delete_user(user_id):
+    if check_login() and session['role'] == 'admin':
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        cursor.execute('UPDATE users SET is_deleted = 1 WHERE id = ?', (user_id,))
+
+        conn.commit()
+        conn.close()
+
+        return redirect('/user-management')
+    else:
+        return redirect('/login')
 
 
 @app.route('/view-workflow/<workflow_id>')

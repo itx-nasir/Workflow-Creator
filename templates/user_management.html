@@ -10,11 +10,18 @@
         <h2>Active Users</h2>
         <ul>
             {% for user in users %}
-                <li><a href="/user-data/{{ user['id'] }}">{{ user['username'] }}</a> - {{ user['role'] }}</li>
+                <li><a href="/user-data/{{ user['id'] }}">{{ user['username'] }}</a> - {{ user['role'] }}
+                    <a href="/delete-user/{{ user['id'] }}" class="delete-button">Delete</a>
+                </li>
             {% endfor %}
         </ul>
         <h2>Deleted Users</h2>
-        <!-- Add your deleted users content here -->
-    </div>
+        <ul>
+            {% for user in deleted_users %}
+                <li><a href="/user-data/{{ user['id'] }}">{{ user['username'] }}</a> - {{ user['role'] }}
+                </li>
+            {% endfor %}
+        </ul>
+        </div>
 </body>
 </html>

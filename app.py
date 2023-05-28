@@ -204,8 +204,7 @@ def pending_workflows():
     if check_login() and session['role'] == 'user':
         conn = get_db_connection()
         cursor = conn.cursor()
-        user_id = session['user_id']
-        cursor.execute('SELECT * FROM workflows WHERE is_approved = 0 and user_id = ?', (user_id,))
+        cursor.execute('SELECT * FROM workflows WHERE is_approved = 0')
         workflows = cursor.fetchall()
 
         conn.close()
@@ -215,19 +214,28 @@ def pending_workflows():
         return redirect('/login')
 
 
+@app.route('/approved-workflows')
+def approved_workflows():
+    if check_login():
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM workflows WHERE is_approved = 1')
+        workflows = cursor.fetchall()
+
+        conn.close()
+
+        return render_template('approved_workflows.html', workflows=workflows)
+    else:
+        return redirect('/login')
+
 @app.route('/search-workflow', methods=['GET', 'POST'])
 def search_workflow():
     if check_login():
         if request.method == 'POST':
             search_query = request.form['search_query']
-            role = session['role']
-            user_id = session['user_id']
             conn = get_db_connection()
             cursor = conn.cursor()
-            if role == 'admin':
-                cursor.execute('SELECT * FROM workflows WHERE name LIKE ?', ('%' + search_query + '%',))
-            else:
-                cursor.execute('SELECT * FROM workflows WHERE name LIKE ? and user_id = ?', ('%' + search_query + '%',user_id))
+            cursor.execute('SELECT * FROM workflows WHERE name LIKE ?', ('%' + search_query + '%',))
             workflows = cursor.fetchall()
 
             conn.close()

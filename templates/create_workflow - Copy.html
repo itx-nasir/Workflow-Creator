@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- Bootstrap CSS -->
+
+  <link rel="stylesheet" href="../static/assets/vendor/bootstrap/css/bootstrap.min.css">
+  <link href="../static/assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="../static/assets/libs/css/style.css">
+  <link rel="stylesheet" href="../static/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+  <link rel="stylesheet" href="../static/assets/vendor/charts/chartist-bundle/chartist.css">
+  <link rel="stylesheet" href="../static/assets/vendor/charts/morris-bundle/morris.css">
+  <link rel="stylesheet" href="../static/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="../static/assets/vendor/charts/c3charts/c3.css">
+  <link rel="stylesheet" href="../static/assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+
+  <!-- G-Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&display=swap" rel="stylesheet">
+  <style>
+    #workflow-container {
+      min-height: 740px;
+      margin-bottom: 60px;
+      background-image: url("/static/notebook-paper.png");
+      background-repeat: repeat;
+    }
+
+    .workflow-item {
+      background-color: #f0f0f0;
+      padding: 10px;
+      margin-bottom: 10px;
+      cursor: move;
+    }
+
+    .workflow-submit {
+      margin-top: 10px;
+    }
+
+    .button-icon {
+      font-size: 24px;
+    }
+
+    .workflow-submit {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .go-back-link {
+      display: block;
+      text-align: center;
+      margin-top: 10px;
+    }
+  </style>
+  <script src="/static/fabric.js" defer></script>
+  <script src="/static/canvas.js" defer></script>
+  <script src="/static/all.min.js"></script>
+  <!-- Fontawesome -->
+  <title>Create Workflow</title>
+</head>
+
+<body>
+
+  <div class="dashboard-main-wrapper">
+    <div class="dashboard-header">
+      <nav class="navbar navbar-expand-lg bg-white fixed-top">
+        <!-- <a class="navbar-brand" href="index.html">Concept</a> -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse " id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto navbar-right-top">
+            <li class="nav-item dropdown nav-user">
+              <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="../static/assets/images/avatar-1.jpg" alt="" class="user-avatar-md rounded-circle"></a>
+              <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
+                <div class="nav-user-info">
+                  <h5 class="mb-0 text-white nav-user-name">John doe</h5>
+                  <span class="status"></span><span class="ml-2">Available</span>
+                </div>
+                <a class="dropdown-item" href="/logout"><i class="fas fa-power-off mr-2"></i>Logout</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+    <div class="nav-left-sidebar sidebar-dark">
+      <div class="menu-list">
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <a class="d-xl-none d-lg-none" href="./admin_dashboard.html">Dashboard</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav flex-column">
+              <li class="nav-divider">
+                Menu
+              </li>
+
+
+              <li class="nav-item">
+                <a class="nav-link " href="/admin-dashboard"><i class="fa fa-fw  fas fa-cube"></i>
+                  Admin Dashboard</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link active" href="/create-workflow"><i class="fa fa-fw  fas fa-th"></i>
+                  Create Workflow</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="/approved-workflows"><i class="fa fa-fw  fas fa-pencil-alt"></i>
+                  Approved Workflows</a>
+              </li>
+
+
+              <li class="nav-item">
+                <a class="nav-link" href="/pending-workflows"><i class="fa fa-fw  fab fa-stack-exchange"></i>
+                  Pending Workflows</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link" href="/search-workflow"><i class="fa fa-fw fas fa-search"></i>
+                  Search Workflow</a>
+              </li>
+
+
+              <li class="nav-item">
+                <a class="nav-link" href="/user-management"><i class="fa fa-fw fa-user-circle"></i>
+                  User Management</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <div class="dashboard-wrapper">
+      <div class="dashboard-ecommerce">
+        <div class="container-fluid dashboard-content ">
+          <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+              <div class="page-header">
+                <h2 class="pageheader-title">Create A Workflow</h2>
+                <div class="page-breadcrumb">
+                  <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a href="./main.html" class="breadcrumb-link">Home</a></li>
+                      <li class="breadcrumb-item active" aria-current="page">Create Workflow</li>
+                    </ol>
+                  </nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="btn-group mb-3" role="group" aria-label="Object Actions">
+            <button onclick="deleteObj()" title="Delete" class="btn btn-primary button-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M20 6a1 1 0 0 1 .117 1.993l-.117 .007h-.081l-.919 11a3 3 0 0 1 -2.824 2.995l-.176 .005h-8c-1.598 0 -2.904 -1.249 -2.992 -2.75l-.005 -.167l-.923 -11.083h-.08a1 1 0 0 1 -.117 -1.993l.117 -.007h16z" stroke-width="0" fill="currentColor"></path>
+                <path d="M14 2a2 2 0 0 1 2 2a1 1 0 0 1 -1.993 .117l-.007 -.117h-4l-.007 .117a1 1 0 0 1 -1.993 -.117a2 2 0 0 1 1.85 -1.995l.15 -.005h4z" stroke-width="0" fill="currentColor"></path>
+              </svg>
+            </button>
+            <button onclick="duplicateObj()" title="Duplicate" class="btn btn-primary button-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clipboard-copy" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h3m9 -9v-5a2 2 0 0 0 -2 -2h-2"></path>
+                <path d="M13 17v-1a1 1 0 0 1 1 -1h1m3 0h1a1 1 0 0 1 1 1v1m0 3v1a1 1 0 0 1 -1 1h-1m-3 0h-1a1 1 0 0 1 -1 -1v-1"></path>
+                <path d="M9 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"></path>
+              </svg>
+            </button>
+            <button onclick="addSquare()" title="Square" class="btn btn-primary button-icon">
+              <i class="fas fa-square"></i>
+            </button>
+            <button onclick="addRect()" title="Rectangle" class="btn btn-primary button-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-rectangle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M3 5m0 2a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2z"></path>
+              </svg>
+            </button>
+            <button onclick="addArrow()" title="Arrow" class="btn btn-primary button-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-narrow-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M5 12l14 0"></path>
+                <path d="M15 16l4 -4"></path>
+                <path d="M15 8l4 4"></path>
+              </svg>
+            </button>
+            <button onclick="addText()" title="Add Text" class="btn btn-primary button-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-typography" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M4 20l3 0"></path>
+                <path d="M14 20l7 0"></path>
+                <path d="M6.9 15l6.9 0"></path>
+                <path d="M10.2 6.3l5.8 13.7"></path>
+                <path d="M5 20l6 -16l2 0l7 16"></path>
+              </svg>
+            </button>
+            <button onclick="addTriangle()" title="Triangle" class="btn btn-primary button-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-triangle-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M11.99 1.968c1.023 0 1.97 .521 2.512 1.359l.103 .172l7.1 12.25l.062 .126a3 3 0 0 1 -2.568 4.117l-.199 .008h-14l-.049 -.003l-.112 .002a3 3 0 0 1 -2.268 -1.226l-.109 -.16a3 3 0 0 1 -.32 -2.545l.072 -.194l.06 -.125l7.092 -12.233a3 3 0 0 1 2.625 -1.548z" stroke-width="0" fill="currentColor"></path>
+              </svg>
+            </button>
+            <button id="send-mail-btn" class="btn btn-primary button-icon" draggable="true" ondragstart="drag(event)">
+  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-mail" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+    <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+    <polyline points="3 7 12 13 21 7"></polyline>
+  </svg>
+</button>
+          </div>
+
+          <div id="workflow-container">
+            <canvas id="canvas" ondrop="drop(event)" ondragover="allowDrop(event)"></canvas>
+          </div>
+          <div class="container">
+  <form method="POST" action="/create-workflow">
+    <div class="form-group">
+      <input type="text" class="form-control" name="workflow_name" placeholder="Enter text">
+    </div>
+    <div class="form-group">
+      <label for="recipient">Recipient:</label>
+      <input type="email" class="form-control" id="recipient" name="recipient" placeholder="Enter recipient email" required>
+    </div>
+    <div class="form-group">
+      <label for="subject">Subject:</label>
+      <input type="text" class="form-control" id="subject" name="subject" placeholder="Enter email subject" required>
+    </div>
+    <div class="form-group">
+      <label for="message">Message:</label>
+      <textarea class="form-control" id="message" name="message" rows="5" placeholder="Enter email message" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Create Workflow</button>
+  </form>
+  <a href="user-dashboard" class="go-back-link">Go Back</a>
+</div>
+        </div>
+      </div>
+    </div>
+    <!-- ============================================================== -->
+    <!-- end wrapper  -->
+    <!-- ============================================================== -->
+  </div>
+
+  <script src="../static/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+  <!-- bootstrap bundle js -->
+  <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+  <!-- slimscroll js -->
+  <script src="../static/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+  <!-- main js -->
+  <script src="../static/assets/libs/js/main-js.js"></script>
+</body>
+
+</html>

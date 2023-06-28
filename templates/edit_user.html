@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit User</title>
+  <link rel="stylesheet" href="../static/assets/vendor/bootstrap/css/bootstrap.min.css">
+  <link href="../static/assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+  <link rel="stylesheet" href="../static/assets/libs/css/style.css">
+  <link rel="stylesheet" href="../static/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+  <link rel="stylesheet" href="../static/assets/vendor/charts/chartist-bundle/chartist.css">
+  <link rel="stylesheet" href="../static/assets/vendor/charts/morris-bundle/morris.css">
+  <link rel="stylesheet" href="../static/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="../static/assets/vendor/charts/c3charts/c3.css">
+  <link rel="stylesheet" href="../static/assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+  <link href="../static/assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&display=swap" rel="stylesheet">
+  <style>
+    .cnt h1 {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .cnt ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .cnt li {
+      margin-bottom: 10px;
+    }
+
+    .cnt li a {
+      display: block;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-radius: 5px;
+      text-decoration: none;
+      color: #333;
+      transition: background-color 0.2s;
+    }
+
+    .cnt li a:hover {
+      background-color: #e9ecef;
+    }
+
+    .page-heading {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .page-heading h1 {
+      font-size: 36px;
+      font-weight: bold;
+      color: #333;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .page-heading p {
+      font-size: 18px;
+      color: #777;
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dashboard-wrapper">
+    <div class="dashboard-ecommerce">
+      <div class="container-fluid dashboard-content">
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="page-header">
+              <h2 class="pageheader-title">Edit User</h2>
+              <div class="page-breadcrumb">
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="./main.html" class="breadcrumb-link">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit User</li>
+                  </ol>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+            <div class="card">
+              <h5 class="card-header">User Details</h5>
+              <div class="card-body">
+                <form method="post" action="{{ url_for('edit_user', user_id=user['id']) }}">
+                  <div class="form-group">
+                    <label for="fullname">Full Name:</label>
+                    <input type="text" class="form-control" id="fullname" name="fullname" value="{{ user['fullname'] }}" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="username">Username (Email):</label>
+                    <input type="text" class="form-control" id="username" name="username" value="{{ user['username'] }}" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="********">
+                  </div>
+                  <div class="form-group">
+                    <label for="role">Role:</label>
+                    <select class="form-control" id="role" name="role" required>
+                      <option value="user" {% if user['role'] == 'user' %}selected{% endif %}>User</option>
+                      <option value="admin" {% if user['role'] == 'admin' %}selected{% endif %}>Admin</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="department">Department:</label>
+                    <input type="text" class="form-control" id="department" name="department" value="{{ user['department'] }}" required>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Save Changes</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../static/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+  <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+  <script src="../static/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+  <script src="../static/assets/libs/js/main-js.js"></script>
+  <script src="../static/assets/vendor/charts/chartist-bundle/chartist.min.js"></script>
+  <script src="../static/assets/vendor/charts/sparkline/jquery.sparkline.js"></script>
+  <script src="../static/assets/vendor/charts/morris-bundle/raphael.min.js"></script>
+  <script src="../static/assets/vendor/charts/morris-bundle/morris.js"></script>
+  <script src="/static/all.min.js"></script>
+</body>
+
+</html>

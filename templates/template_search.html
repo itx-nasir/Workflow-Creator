@@ -1,0 +1,250 @@
+</html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../static/assets/vendor/bootstrap/css/bootstrap.min.css">
+    <link href="../static/assets/vendor/fonts/circular-std/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/assets/libs/css/style.css">
+    <link rel="stylesheet" href="../static/assets/vendor/fonts/fontawesome/css/fontawesome-all.css">
+    <link rel="stylesheet" href="../static/assets/vendor/charts/chartist-bundle/chartist.css">
+    <link rel="stylesheet" href="../static/assets/vendor/charts/morris-bundle/morris.css">
+    <link rel="stylesheet"
+        href="../static/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../static/assets/vendor/charts/c3charts/c3.css">
+    <link rel="stylesheet" href="../static/assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
+
+    <!-- G-Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&display=swap"
+        rel="stylesheet">
+    <!-- Fontawesome -->
+    <title>Search Workflow</title>
+    <style>
+        .cnt h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .cnt ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .cnt li {
+            margin-bottom: 10px;
+        }
+
+        .cnt li a {
+            display: block;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+            transition: background-color 0.2s;
+        }
+
+        .cnt li a:hover {
+            background-color: #e9ecef;
+        }
+
+        .page-heading {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-heading h1 {
+            font-size: 36px;
+            font-weight: bold;
+            color: #333;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .page-heading p {
+            font-size: 18px;
+            color: #777;
+            margin-bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-main-wrapper">
+        <div class="dashboard-header">
+            <nav class="navbar navbar-expand-lg bg-white fixed-top">
+                <!-- <a class="navbar-brand" href="index.html">Concept</a> -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto navbar-right-top">
+                        <li class="nav-item dropdown nav-user">
+                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
+                                    src="../static/assets/images/avatar-1.jpg" alt=""
+                                    class="user-avatar-md rounded-circle"></a>
+                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown"
+                                aria-labelledby="navbarDropdownMenuLink2">
+                                <div class="nav-user-info">
+                                    <h5 class="mb-0 text-white nav-user-name">John doe</h5>
+                                    <span class="status"></span><span class="ml-2">Available</span>
+                                </div>
+                                <a class="dropdown-item" href="/logout"><i class="fas fa-power-off mr-2"></i>Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <div class="nav-left-sidebar sidebar-dark">
+            <div class="menu-list">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="d-xl-none d-lg-none" href="./admin_dashboard.html">Dashboard</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav flex-column">
+                            <li class="nav-divider">
+                                Menu
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a class="nav-link " href="/admin-dashboard"><i class="fa fa-fw  fas fa-cube"></i>
+                                    Admin Dashboard</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link " href="/create-workflow"><i class="fa fa-fw  fas fa-th"></i>
+                                    Create Workflow</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/approved-workflows"><i
+                                        class="fa fa-fw  fas fa-pencil-alt"></i>
+                                    Approved Workflows</a>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/pending-workflows"><i
+                                        class="fa fa-fw  fab fa-stack-exchange"></i>
+                                    Pending Workflows</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link active" href="/search-workflow"><i
+                                        class="fa fa-fw fas fa-search"></i>
+                                    Search Workflow</a>
+                            </li>
+
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/user-management"><i class="fa fa-fw fa-user-circle"></i>
+                                    User Management</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <div class="dashboard-wrapper">
+            <div class="dashboard-ecommerce">
+                <div class="container-fluid dashboard-content ">
+                    <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="page-header">
+                                <h2 class="pageheader-title">Admin Dashboard</h2>
+                                <div class="page-breadcrumb">
+                                    <nav aria-label="breadcrumb">
+                                        <ol class="breadcrumb">
+                                            <li class="breadcrumb-item"><a href="./main.html"
+                                                    class="breadcrumb-link">Home</a>
+                                            </li>
+                                            <li class="breadcrumb-item active" aria-current="page">
+                                                Search Workflow
+                                            </li>
+                                        </ol>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container">
+        <h1>Template Search</h1>
+        
+        <!-- Search Form -->
+        <form action="/template-search" method="GET">
+            <input type="text" name="search_query" placeholder="Search by workflow name">
+            <button type="submit">Search</button>
+        </form>
+        
+        <!-- Search Results -->
+        <h2>Search Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Workflow Name</th>
+                    <th>Created By</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for workflow in template_workflows %}
+                <tr>
+                    <td>{{ workflow['name'] }}</td>
+                    <td>{{ workflow['created_by'] }}</td>
+                    <td>
+                        <a href="/view-workflow/{{ workflow['id'] }}">View</a>
+                        <a href="/edit-workflow/{{ workflow['id'] }}">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- ============================================================== -->
+            <!-- end wrapper  -->
+            <!-- ============================================================== -->
+        </div>
+
+        <script src="../static/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+        <!-- bootstrap bundle js -->
+        <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+        <!-- slimscroll js -->
+        <script src="../static/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+        <!-- main js -->
+        <script src="../static/assets/libs/js/main-js.js"></script>
+        <!-- chart chartist js -->
+        <script src="../static/assets/vendor/charts/chartist-bundle/chartist.min.js"></script>
+        <!-- sparkline js -->
+        <script src="../static/assets/vendor/charts/sparkline/jquery.sparkline.js"></script>
+        <!-- morris js -->
+        <script src="../static/assets/vendor/charts/morris-bundle/raphael.min.js"></script>
+        <script src="../static/assets/vendor/charts/morris-bundle/morris.js"></script>
+        <script src="/static/all.min.js"></script>
+
+
+</html>

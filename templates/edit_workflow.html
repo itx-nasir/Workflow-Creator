@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Workflow</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='fabric.js') }}"></script>
+    <script src="{{ url_for('static', filename='canvas.js') }}"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Workflow</h1>
+        <form method="POST" action="{{ update_workflow_url }}">
+            <label for="workflow_name">Workflow Name:</label>
+            <input type="text" id="workflow_name" name="workflow_name" value="{{ workflow['name'] }}">
+            <div id="workflow-container">
+                <canvas id="workflow-canvas"></canvas>
+            </div>
+            <button type="submit" class="btn btn-primary">Update Workflow</button>
+        </form>
+    </div>
+    <script>
+        var workflowData = JSON.parse('{{ workflow["canvas_data"]|safe|replace("\'", "\\\'") }}');
+        var workflowCanvas = new fabric.Canvas('workflow-canvas', { width: 800, height: 500 });
+        workflowCanvas.loadFromJSON(workflowData, function () {
+            workflowCanvas.renderAll();
+        });
+    </script>
+</body>
+</html>

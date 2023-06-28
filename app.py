@@ -3,11 +3,23 @@ import json
 import smtplib
 import sqlite3
 from email.mime.text import MIMEText
-from flask import jsonify
-from flask import Flask, render_template, request, redirect, session, flash
+from flask import Flask, render_template, request, redirect, session, flash, jsonify, send_from_directory
+from flask_wtf import FlaskForm
+from werkzeug.utils import secure_filename
+from wtforms import FileField
+
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key'  # Change this to a secure secret key
+
+app.secret_key = 'your secret key'
+
+app.config['DROPZONE_ALLOWED_FILE_CUSTOM'] = True
+app.config['DROPZONE_ALLOWED_FILE_TYPE'] = '.csv, .xls, .xlsx, .doc, .docx, .pdf'
+app.config['DROPZONE_MAX_FILE_SIZE'] = 10
+app.config['DROPZONE_MAX_FILES'] = 2
+
+class MyForm(FlaskForm):
+    image = FileField('image')
 
 
 # Get database connection
@@ -15,6 +27,26 @@ def get_db_connection():
     conn = sqlite3.connect('workflows.db')
     conn.row_factory = sqlite3.Row
     return conn
+
+def create_documents_table():
+    conn = sqlite3.connect('documents.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS documents (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            workflow_name TEXT,
+            filename TEXT,
+            path TEXT,
+            upload_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+
+    conn.commit()
+    conn.close()
+
+# Call the function to create the documents table
+create_documents_table()
 
 
 # Check login status
@@ -139,6 +171,31 @@ def save_object_to_database(object_id, recipient, subject, body):
 @app.route('/')
 def main_page():
     return render_template('main.html')
+
+
+@app.route('/upload-document', methods=['POST'])
+def upload_document():
+    workflow_name = request.form['workflow_name']
+    document = request.files['document']
+
+    if document:
+        filename = secure_filename(document.filename)
+        path = os.path.join('ENV', 'Uploads', workflow_name, filename)
+        document.save(path)
+
+        conn = sqlite3.connect('documents.db')
+        cursor = conn.cursor()
+
+        cursor.execute('''
+            INSERT INTO documents (workflow_name, filename, path) VALUES (?, ?, ?)
+        ''', (workflow_name, filename, path))
+
+        conn.commit()
+        conn.close()
+
+        return 'Document uploaded successfully!'
+
+    return 'No document found in the request.'
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -489,7 +546,7 @@ def logout():
 def create_user():
     if check_login() and session['role'] == 'admin':
         if request.method == 'POST':
-            # Get the user data from the form submission
+            fullname = request.form['fullname']
             username = request.form['username']
             password = request.form['password']
             role = request.form['role']
@@ -499,8 +556,8 @@ def create_user():
             cursor = conn.cursor()
 
             # Insert the user data into the database
-            cursor.execute('INSERT INTO users (username, password, role, department) VALUES (?, ?, ?, ?)',
-                           (username, password, role, department))
+            cursor.execute('INSERT INTO users (fullname, username, password, role, department) VALUES (?, ?, ?, ?, ?)',
+                           (fullname, username, password, role, department))
 
             conn.commit()
             conn.close()
@@ -539,7 +596,6 @@ def edit_user(user_id):
 
     else:
         # Connect to the SQLite database
-        conn = sqlite3.connect('workflows.db')
         conn = sqlite3.connect('workflows.db')
         cursor = conn.cursor()
 
@@ -582,6 +638,56 @@ def save_object():
 
     # Return a JSON response with the success status
     return jsonify({'success': success})
+
+
+@app.route('/documents/<workflow_name>/<filename>', methods=['GET'])
+def download_document(workflow_name, filename):
+    conn = sqlite3.connect('documents.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        SELECT path FROM documents WHERE workflow_name = ? AND filename = ?
+    ''', (workflow_name, filename))
+
+    result = cursor.fetchone()
+
+    if result:
+        document_path = result[0]
+        return send_from_directory(app.config['UPLOADS_DEFAULT_DEST'], document_path)
+
+    return 'Document not found.'
+
+@app.route('/api/users', methods=['GET'])
+def get_users():
+    try:
+        # Connect to the SQLite database
+        conn = sqlite3.connect('workflows.db')
+        cursor = conn.cursor()
+
+        # Execute the query to fetch users
+        cursor.execute("SELECT * FROM users")
+        users = cursor.fetchall()
+
+        # Convert the result to a list of dictionaries
+        users_data = []
+        for user in users:
+            user_dict = {
+                'id': user[0],
+                'name': user[1],
+                # Add other user properties as needed
+            }
+            users_data.append(user_dict)
+
+        # Close the database connection
+        cursor.close()
+        conn.close()
+
+        return jsonify(users_data)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+
 
 
 if __name__ == '__main__':

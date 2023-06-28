@@ -338,3 +338,155 @@ function allowDrop(event) {
   event.preventDefault();
 }
 
+
+function addUploadDocumentIcon() {
+  var uploadSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="upload-folder"><path d="M12.71,10.79a1,1,0,0,0-.33-.21,1,1,0,0,0-.76,0,1,1,0,0,0-.33.21l-2,2a1,1,0,0,0,1.42,1.42l.29-.3V16.5a1,1,0,0,0,2,0V13.91l.29.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42ZM19,5.5H12.72l-.32-1a3,3,0,0,0-2.84-2H5a3,3,0,0,0-3,3v13a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V8.5A3,3,0,0,0,19,5.5Zm1,13a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V5.5a1,1,0,0,1,1-1H9.56a1,1,0,0,1,.95.68l.54,1.64A1,1,0,0,0,12,7.5h7a1,1,0,0,1,1,1Z"></path></svg>';
+
+  fabric.loadSVGFromString(uploadSVG, function (objects, options) {
+    var uploadIcon = fabric.util.groupSVGElements(objects, options);
+    uploadIcon.set({
+      left: 50,
+      top: 50,
+      scaleX: 2,  // Adjust the scale as needed
+      scaleY: 2,  // Adjust the scale as needed
+      fill: 'blue'
+    });
+
+    uploadIcon.uploadDocument = function () {
+      // Perform the upload document functionality
+      var fileInput = document.createElement('input');
+      fileInput.type = 'file';
+
+      fileInput.addEventListener('change', function (e) {
+        var file = e.target.files[0];
+        // Process the uploaded file
+
+        // Save the document object to the database
+        saveObjectToDatabase(uploadIcon);
+      });
+
+      fileInput.click();
+    };
+
+    uploadIcon.on('mousedown', function () {
+      uploadIcon.uploadDocument();
+    });
+
+    canvas.add(uploadIcon);
+    canvas.renderAll();
+  });
+}
+
+function addWaitIcon() {
+  // Specify the path of the SVG file
+  var svgFilePath = '/static/images/Wait-Previous.svg';
+
+  // Load the SVG file as an image
+  fabric.Image.fromURL(svgFilePath, function (waitIcon) {
+    waitIcon.set({
+      left: 50,
+      top: 50,
+      scaleX: 2,  // Adjust the scale as needed
+      scaleY: 2,  // Adjust the scale as needed
+      fill: 'clear',
+      stroke: 'black',
+    });
+
+    waitIcon.waitForPreviousStep = function () {
+      // Implement the logic to wait for the previous step to be completed
+      // For example, you can show a loading spinner or disable interactions until the previous step is completed
+
+      // Once the previous step is completed, you can proceed with the next actions
+      proceedWithNextActions(waitIcon);
+    };
+
+    waitIcon.on('mousedown', function () {
+      waitIcon.waitForPreviousStep();
+    });
+
+    canvas.add(waitIcon);
+    canvas.renderAll();
+  });
+}
+
+
+function showDateTimePicker() {
+  var dateTimePicker = $('#datetimepicker');
+  dateTimePicker.show();
+
+  // Initialize the date and time picker library or implement your own logic here
+  // For example, you can use libraries like jQuery UI Datepicker combined with a time picker plugin
+  dateTimePicker.datetimepicker({
+    format: 'yyyy-mm-dd hh:ii:ss',
+    autoclose: true,
+    todayBtn: true,
+    startDate: new Date(),
+    minuteStep: 15,
+  });
+
+  // Attach an event listener to capture the selected date and time
+  dateTimePicker.on('change.datetimepicker', function (e) {
+    var selectedDateTime = dateTimePicker.datetimepicker('getDate');
+    updateDueDate(selectedDateTime);
+    hideDateTimePicker();
+  });
+}
+
+
+function addAlarmClockIcon() {
+  // Specify the path of the SVG or ICO file
+  var iconFilePath = '/static/images/Alarm-Clock.svg';
+
+  fabric.Image.fromURL(iconFilePath, function (icon) {
+    icon.set({
+      left: 50,
+      top: 50,
+      scaleX: 0.25,  // Adjust the scale as needed
+      scaleY: 0.25,  // Adjust the scale as needed
+      fill: 'white',
+      stroke: 'black',
+    });
+
+    icon.on('mousedown', function () {
+      // Show the Bootstrap Datepicker as a popup
+      $('#date-picker-example').datepicker('show');
+    });
+
+    canvas.add(icon);
+    canvas.renderAll();
+  });
+}
+
+function openPopup() {
+  // Show the overlay
+  $("#overlay").css("display", "flex");
+
+  // Initialize the DateTimePicker
+  let datetimepicker = new ej.calendars.DateTimePicker({
+    format: "dd-MMM-yy hh:mm a",
+    value: new Date(),
+    placeholder: "Select a date and time",
+    width: "233px"
+  });
+  datetimepicker.appendTo("#datetimepicker");
+  datetimepicker.show("time");
+}
+
+function closePopup() {
+  // Hide the overlay
+  $("#overlay").css("display", "none");
+
+  // Remove the DateTimePicker instance
+  ej.base.remove($("#datetimepicker").children()[0]);
+}
+
+function submitForm() {
+  // Get the selected date and time from the DateTimePicker
+  let selectedDate = $("#datetimepicker").children().val();
+  console.log("Selected Date:", selectedDate);
+
+  // Close the popup
+  closePopup();
+
+  // Perform any additional actions or submit the form data to the backend
+}

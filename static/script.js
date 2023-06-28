@@ -192,3 +192,8 @@ function dragStart(event) {
 function allowDrop(event) {
   event.preventDefault();
 }
+
+<script>
+  $(document).ready(function() {
+    $('#example').datepicker();
+  });

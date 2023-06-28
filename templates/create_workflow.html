@@ -15,13 +15,16 @@
   <link rel="stylesheet" href="../static/assets/vendor/fonts/material-design-iconic-font/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="../static/assets/vendor/charts/c3charts/c3.css">
   <link rel="stylesheet" href="../static/assets/vendor/fonts/flag-icon-css/flag-icon.min.css">
-
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.css">
+  <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/20.4.41/material.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
   <!-- G-Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;0,1000;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900;1,1000&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
   <style>
     #workflow-container {
       min-height: 740px;
@@ -225,11 +228,11 @@
   </svg>
 </button>
 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-  <a class="dropdown-item" href="#" onclick="addMailIcon()">Add Mail Icon</a>
-  <a class="dropdown-item" href="#" onclick="uploadDocument()">Upload a Document</a>
+  <a class="dropdown-item" href="#" onclick="addSendMailButton()">Add Mail Icon</a>
+  <a class="dropdown-item" href="#" onclick="addUploadDocumentIcon()">Upload a Document</a>
   <a class="dropdown-item" href="#" onclick="assignTo()">Assign to ...</a>
-  <a class="dropdown-item" href="#" onclick="waitForPrevious()">Wait for Previous Step to be Completed</a>
-  <a class="dropdown-item" href="#" onclick="setDateTime()">Set a Date &amp; Time for the Task</a>
+  <a class="dropdown-item" href="#" onclick="addWaitIcon()">Wait for Previous Step to be Completed</a>
+  <a class="dropdown-item" href="#" onclick="addAlarmClockIcon()">Set a Date &amp; Time for the Task</a>
 </div>
           </div>
 
@@ -241,35 +244,54 @@
           </div>
 
           <div id="overlay" class="overlay">
-            <div class="form-container">
-              <h3>Create A Workflow</h3>
-              <form method="POST" action="/create-workflow" id="workflowForm">
-                <div class="form-group">
-                  <label for="recipient">Recipient:</label>
-                  <input type="text" class="form-control" name="recipient" id="recipient" placeholder="Enter recipient email">
-                </div>
-                <div class="form-group">
-                  <label for="subject">Subject:</label>
-                  <input type="text" class="form-control" name="subject" id="subject" placeholder="Enter email subject">
-                </div>
-                <div class="form-group">
-                  <label for="body">Body:</label>
-                  <textarea class="form-control" name="body" id="body" rows="5" placeholder="Enter email body"></textarea>
-                </div>
-              </form>
-            </div>
+  <div class="form-container">
+    <h3>Create A Workflow</h3>
+    <form method="POST" action="/create-workflow" id="workflowForm">
+      <div class="form-group">
+        <label for="recipient">Recipient:</label>
+        <input type="text" class="form-control" name="recipient" id="recipient" placeholder="Enter recipient email">
+      </div>
+      <div class="form-group">
+        <label for="subject">Subject:</label>
+        <input type="text" class="form-control" name="subject" id="subject" placeholder="Enter email subject">
+      </div>
+      <div class="form-group">
+        <label for="body">Body:</label>
+        <textarea class="form-control" name="body" id="body" rows="5" placeholder="Enter email body"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="datetimepicker">Select a date and time:</label>
+        <input type="text" class="form-control" name="datetimepicker" id="datetimepicker" readonly>
+      </div>
+      <button type="button" class="btn btn-primary" onclick="showDateTimePicker()">Show DateTimePicker</button>
+    </form>
+  </div>
+</div>
+          <script>
+  function showDateTimePicker() {
+    // Show the DateTimePicker
+    $('#datetimepicker').datepicker('show');
+  }
+
+  $(document).ready(function() {
+    $('#datetimepicker').datepicker({
+      showAnim: "fadeIn",
+      dateFormat: "dd-M-yy",
+      timeFormat: "hh:mm tt",
+      onSelect: function(dateText, inst) {
+        // Handle date and time selection
+        console.log("Selected Date and Time: " + dateText);
+      }
+    });
+  });
+</script>
           </div>
         </div>
       </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- end wrapper  -->
-    <!-- ============================================================== -->
-  </div>
 
-</div>
 
-<script src="../static/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+  <script src="../static/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
 <!-- bootstrap bundle js -->
 <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
 <!-- slimscroll js -->
@@ -283,6 +305,10 @@
 <!-- morris js -->
 <script src="../static/assets/vendor/charts/morris-bundle/raphael.min.js"></script>
 <script src="../static/assets/vendor/charts/morris-bundle/morris.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui-timepicker-addon/1.6.3/jquery-ui-timepicker-addon.js"></script>
+<script src="https://cdn.syncfusion.com/ej2/20.4.41/dist/ej2.min.js"></script>
+
 
 </body>
 
